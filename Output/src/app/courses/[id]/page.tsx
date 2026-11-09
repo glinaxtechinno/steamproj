@@ -314,22 +314,23 @@ export default function CourseDetailPage() {
                 <div className="space-y-2 pt-2 border-t border-surface-border">
                   {isAuthenticated ? (
                     <>
-                      {hasStarted ? (
-                        <a href={course.source_url} target="_blank" rel="noopener noreferrer" className="block">
-                          <Button fullWidth variant="primary">Visit course &#8599;</Button>
-                        </a>
-                      ) : (
-                        <Button fullWidth variant="secondary" isLoading={isStarting}
-                          onClick={() => startCourse(id, {
-                            onSuccess: () => {
-                              setHasStartedLocally(true);
-                              showMessage("Course started");
-                            },
-                            onError: () => showMessage("Could not start this course. Please try again."),
-                          })}>
-                          Start course
-                        </Button>
-                      )}
+                       {!hasStarted ? (
+                         <Button fullWidth variant="secondary" isLoading={isStarting}
+                           onClick={() => startCourse(id, {
+                             onSuccess: () => {
+                               setHasStartedLocally(true);
+                               showMessage("Course started");
+                             },
+                             onError: () => showMessage("Could not start this course. Please try again."),
+                           })}>
+                           Start course
+                         </Button>
+                       ) : !isYouTube ? (
+                         // Non-YouTube providers have no embed, so the external link is the only way to take the course
+                         <a href={course.source_url} target="_blank" rel="noopener noreferrer" className="block">
+                           <Button fullWidth variant="primary">Visit course &#8599;</Button>
+                         </a>
+                       ) : null}
 
                       {hasStarted && (
                         <Button fullWidth variant={isCompleted ? "ghost" : "secondary"}
